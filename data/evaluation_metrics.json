@@ -1,0 +1,38 @@
+{
+  "xgboost": {
+    "rmse": 2.1679,
+    "mae": 1.5243,
+    "mape": 13.8248,
+    "r2_score": 0.785228
+  },
+  "random_forest": {
+    "rmse": 2.8084,
+    "mae": 2.2833,
+    "mape": 34.6247,
+    "r2_score": 0.639588
+  },
+  "extra_trees": {
+    "rmse": 3.273,
+    "mae": 2.705,
+    "mape": 40.8676,
+    "r2_score": 0.510474
+  },
+  "gradient_boosting": {
+    "rmse": 2.1378,
+    "mae": 1.8193,
+    "mape": 21.0796,
+    "r2_score": 0.791151
+  },
+  "adaboost": {
+    "rmse": 6.9588,
+    "mae": 5.8109,
+    "mape": 91.6167,
+    "r2_score": -1.212866
+  },
+  "stacking_ensemble": {
+    "rmse": 2.0247,
+    "mae": 1.6114,
+    "mape": 16.6684,
+    "r2_score": 0.812665
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "raw_shape": [
+    1170,
+    6
+  ],
+  "raw_columns": [
+    "Date",
+    "Children apprehended and placed in CBP custody*",
+    "Children in CBP custody",
+    "Children transferred out of CBP custody",
+    "Children in HHS Care",
+    "Children discharged from HHS Care"
+  ],
+  "empty_rows_dropped": 450,
+  "column_mapping": {
+    "Date": "date",
+    "Children apprehended and placed in CBP custody*": "apprehended",
+    "Children in CBP custody": "cbp_custody",
+    "Children transferred out of CBP custody": "transferred_out",
+    "Children in HHS Care": "hhs_care",
+    "Children discharged from HHS Care": "discharged"
+  },
+  "date_parse_failures": 0,
+  "date_range": {
+    "min": "2023-01-12 00:00:00",
+    "max": "2025-12-21 00:00:00"
+  },
+  "missing_values_before": {
+    "apprehended": 0,
+    "cbp_custody": 0,
+    "transferred_out": 0,
+    "hhs_care": 0,
+    "discharged": 0
+  },
+  "type_conversions": {
+    "apprehended": "int64",
+    "cbp_custody": "int64",
+    "transferred_out": "int64",
+    "hhs_care": "int64",
+    "discharged": "int64"
+  },
+  "duplicates_removed": 0,
+  "outlier_bounds": {
+    "apprehended": {
+      "lower_bound": -190.875,
+      "upper_bound": 350.125
+    },
+    "cbp_custody": {
+      "lower_bound": -304.875,
+      "upper_bound": 604.125
+    },
+    "transferred_out": {
+      "lower_bound": -263.875,
+      "upper_bound": 477.125
+    },
+    "hhs_care": {
+      "lower_bound": -5846.0,
+      "upper_bound": 16324.0
+    },
+    "discharged": {
+      "lower_bound": -351.125,
+      "upper_bound": 637.875
+    }
+  },
+  "outlier_counts": {
+    "apprehended": 0,
+    "cbp_custody": 0,
+    "transferred_out": 0,
+    "hhs_care": 0,
+    "discharged": 0
+  },
+  "basic_statistics": {
+    "apprehended": {
+      "mean": 93.52361111111111,
+      "median": 99.0,
+      "std": 72.64662501468185,
+      "min": 0,
+      "max": 333,
+      "zeros": 2
+    },
+    "cbp_custody": {
+      "mean": 171.49444444444444,
+      "median": 193.0,
+      "std": 126.3549649188163,
+      "min": 7,
+      "max": 531,
+      "zeros": 0
+    },
+    "transferred_out": {
+      "mean": 128.66805555555555,
+      "median": 157.0,
+      "std": 97.3220116076661,
+      "min": 0,
+      "max": 440,
+      "zeros": 3
+    },
+    "hhs_care": {
+      "mean": 6061.275,
+      "median": 6406.5,
+      "std": 2833.0701088001533,
+      "min": 1972,
+      "max": 11516,
+      "zeros": 0
+    },
+    "discharged": {
+      "mean": 173.40694444444443,
+      "median": 181.0,
+      "std": 125.70284055728163,
+      "min": 0,
+      "max": 505,
+      "zeros": 1
+    }
+  },
+  "final_shape": [
+    720,
+    11
+  ],
+  "final_dtypes": {
+    "date": "datetime64[us]",
+    "apprehended": "int64",
+    "cbp_custody": "int64",
+    "transferred_out": "int64",
+    "hhs_care": "int64",
+    "discharged": "int64",
+    "apprehended_outlier": "bool",
+    "cbp_custody_outlier": "bool",
+    "transferred_out_outlier": "bool",
+    "hhs_care_outlier": "bool",
+    "discharged_outlier": "bool"
+  },
+  "final_null_counts": {
+    "date": 0,
+    "apprehended": 0,
+    "cbp_custody": 0,
+    "transferred_out": 0,
+    "hhs_care": 0,
+    "discharged": 0,
+    "apprehended_outlier": 0,
+    "cbp_custody_outlier": 0,
+    "transferred_out_outlier": 0,
+    "hhs_care_outlier": 0,
+    "discharged_outlier": 0
+  },
+  "timestamp": "2026-05-27 07:35:01.012076"
+}
