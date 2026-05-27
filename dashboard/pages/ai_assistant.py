@@ -17,7 +17,7 @@ from dashboard.components.theme import render_page_header
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 # Default model used by the assistant
-MODEL_NAME = "gemini-pro"
+MODEL_NAME = "gemini-2.5-flash"
 
 
 def get_api_key():
