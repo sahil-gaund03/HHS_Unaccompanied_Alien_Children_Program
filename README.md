@@ -43,15 +43,20 @@
 
 | Executive Overview Dashboard | SHAP Explainability Module |
 |:---:|:---:|
-| ![Executive Dashboard Preview](assets/screenshots/executive_overview.png) | ![SHAP Dashboard Preview](assets/screenshots/shap_dashboard.png) |
+| <img src="https://placehold.co/600x340/1a1a2e/4fc3f7?text=Executive+Overview+Dashboard" width="480" alt="Executive Overview Dashboard"/> | <img src="https://placehold.co/600x340/1a1a2e/a78bfa?text=SHAP+Explainability+Module" width="480" alt="SHAP Dashboard"/> |
 | *KPI monitoring, pipeline summary, trend cards* | *Feature importance & SHAP dependence plots* |
 
 | Forecast Dashboard | Anomaly Detection Module |
 |:---:|:---:|
-| ![Forecast Dashboard Preview](assets/screenshots/forecast_dashboard.png) | ![Anomaly Detection Preview](assets/screenshots/anomaly_detection.png) |
+| <img src="https://placehold.co/600x340/1a1a2e/34d399?text=Forecast+Dashboard+%2830-Day%29" width="480" alt="Forecast Dashboard"/> | <img src="https://placehold.co/600x340/1a1a2e/f87171?text=Anomaly+Detection+Module" width="480" alt="Anomaly Detection"/> |
 | *30-day discharge predictions with confidence intervals* | *Isolation Forest anomaly identification* |
 
-> 📌 **Replace placeholders** with actual screenshots after launching `streamlit run app.py`
+| Pipeline Flow (Sankey) | Transfer Efficiency |
+|:---:|:---:|
+| <img src="https://placehold.co/600x340/1a1a2e/fbbf24?text=Pipeline+Flow+%E2%80%94+Sankey+Diagram" width="480" alt="Pipeline Flow"/> | <img src="https://placehold.co/600x340/1a1a2e/38bdf8?text=Transfer+Efficiency+Module" width="480" alt="Transfer Efficiency"/> |
+| *CBP → HHS → discharge Sankey + funnel* | *CBP→HHS pipeline velocity metrics* |
+
+> 📸 **To show real screenshots:** add your own PNGs to `assets/screenshots/` and update the `src` paths above.
 
 </div>
 
@@ -653,9 +658,9 @@ merge, publish, distribute, sublicense, and/or sell copies of the software.
 
 <div align="center">
 
-<img src="https://github.com/yourusername.png" width="100" style="border-radius: 50%;" />
+<img src="https://avatars.githubusercontent.com/yourusername?v=4" width="100" style="border-radius: 50%;" />
 
-### Your Name
+### Sahil Gaund
 
 *ML Engineer · Data Scientist · Open Source Contributor*
 
