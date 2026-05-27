@@ -91,6 +91,7 @@ def render(df: pd.DataFrame):
     st.sidebar.markdown("### 🔑 Gemini Configuration")
 
     api_key = get_api_key()
+    selected_model_name = "gemini-1.5-flash"
 
     if not api_key:
         st.sidebar.warning("⚠️ No Gemini API Key found.")
@@ -106,6 +107,18 @@ def render(df: pd.DataFrame):
             st.rerun()
     else:
         st.sidebar.success("✅ Gemini API Connected")
+        model_options = [
+            "gemini-1.5-flash",
+            "gemini-1.5-pro",
+            "gemini-pro",
+            "gemini-1.0-pro"
+        ]
+        selected_model_name = st.sidebar.selectbox(
+            "Select Model",
+            options=model_options,
+            index=0,
+            help="If you get a 404 error (e.g. key has model restrictions), select 'gemini-pro'."
+        )
         if st.sidebar.button("Reset API Key"):
             st.session_state.gemini_api_key = None
             if "chat_history" in st.session_state:
@@ -178,7 +191,7 @@ Guidelines for your responses:
     try:
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
+            model_name=selected_model_name,
             system_instruction=system_instruction
         )
     except Exception as e:
@@ -188,9 +201,10 @@ Guidelines for your responses:
     # Chat history state initialization
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
-    if "chat_session" not in st.session_state:
+    if "chat_session" not in st.session_state or st.session_state.get("current_model") != selected_model_name:
         # Start a new chat session with the model
         st.session_state.chat_session = model.start_chat(history=[])
+        st.session_state.current_model = selected_model_name
 
     # Suggestion Chips / Buttons
     st.markdown("### 💡 Recommended Queries")
