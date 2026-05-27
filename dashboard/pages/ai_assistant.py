@@ -37,6 +37,22 @@ def get_api_key():
     except Exception:
         pass
 
+    # Check local secrets.toml manually (robust fallback)
+    try:
+        secrets_path = PROJECT_ROOT / ".streamlit" / "secrets.toml"
+        if secrets_path.exists():
+            with open(secrets_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    if "=" in line:
+                        parts = line.split("=", 1)
+                        key_name = parts[0].strip()
+                        if key_name == "GEMINI_API_KEY":
+                            val = parts[1].strip().strip('"').strip("'")
+                            st.session_state.gemini_api_key = val
+                            return val
+    except Exception:
+        pass
+
     return None
 
 
