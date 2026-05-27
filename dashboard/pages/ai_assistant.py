@@ -2,8 +2,8 @@
 dashboard/pages/ai_assistant.py
 ===============================
 AI Policy Copilot page.
-An interactive chat assistant powered by Gemini 1.5 Flash, pre-loaded with
-the UAC program dataset and policy reports for answering operational and strategic questions.
+An interactive chat assistant powered by Gemini, pre-loaded with the UAC program 
+dataset and policy reports to answer operational and strategic questions.
 """
 
 import streamlit as st
@@ -16,19 +16,22 @@ from dashboard.components.theme import render_page_header
 # Resolve project root
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
+# Default model used by the assistant
+MODEL_NAME = "gemini-pro"
+
 
 def get_api_key():
-    """Retrieve the Gemini API key from session state, environment, or Streamlit secrets."""
+    """Retrieve the Gemini API key silently from session state, environment, or secrets."""
     if "gemini_api_key" in st.session_state and st.session_state.gemini_api_key:
         return st.session_state.gemini_api_key
 
-    # Check env var
+    # 1. Check env var
     env_key = os.environ.get("GEMINI_API_KEY")
     if env_key:
         st.session_state.gemini_api_key = env_key
         return env_key
 
-    # Check streamlit secrets
+    # 2. Check Streamlit secrets
     try:
         sec_key = st.secrets.get("GEMINI_API_KEY")
         if sec_key:
@@ -37,7 +40,7 @@ def get_api_key():
     except Exception:
         pass
 
-    # Check local secrets.toml manually (robust fallback)
+    # 3. Check local secrets.toml manually
     try:
         secrets_path = PROJECT_ROOT / ".streamlit" / "secrets.toml"
         if secrets_path.exists():
@@ -102,46 +105,30 @@ def render(df: pd.DataFrame):
     # Fetch context data
     cleaned_csv_content, exec_content, policy_content = load_context_data()
 
-    # Sidebar: API Key Configuration
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("### 🔑 Gemini Configuration")
-
+    # Get API key silently
     api_key = get_api_key()
-    selected_model_name = "gemini-pro"
 
+    # Show warning in main workspace if key is missing
     if not api_key:
-        st.sidebar.warning("⚠️ No Gemini API Key found.")
-        input_key = st.sidebar.text_input(
-            "Enter Gemini API Key",
-            type="password",
-            placeholder="AIzaSy...",
-            help="Get an API key from Google AI Studio",
+        st.warning(
+            "⚠️ **AI Copilot is Offline**: Gemini API Key is missing. "
+            "Please configure `GEMINI_API_KEY` in environment variables or your local `.streamlit/secrets.toml` file to activate the assistant."
         )
-        if input_key:
-            st.session_state.gemini_api_key = input_key
-            st.sidebar.success("API Key saved for session!")
-            st.rerun()
-    else:
-        st.sidebar.success("✅ Gemini API Connected")
-        model_options = [
-            "gemini-1.5-flash",
-            "gemini-1.5-pro",
-            "gemini-pro",
-            "gemini-1.0-pro"
-        ]
-        selected_model_name = st.sidebar.selectbox(
-            "Select Model",
-            options=model_options,
-            index=2,
-            help="If you get a 404 error (e.g. key has model restrictions), select 'gemini-pro'."
-        )
-        if st.sidebar.button("Reset API Key"):
-            st.session_state.gemini_api_key = None
-            if "chat_history" in st.session_state:
-                del st.session_state.chat_history
-            if "chat_session" in st.session_state:
-                del st.session_state.chat_session
-            st.rerun()
+        
+        # Display sample queries so they know what they can ask
+        st.markdown("### 📊 What you can ask the Copilot")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("""
+            * **Operational Performance:** "How did the average discharge effectiveness change between 2023, 2024, and 2025?"
+            * **Bottleneck Analysis:** "What are the main causes of custody surges and backlog accumulation?"
+            """)
+        with col2:
+            st.markdown("""
+            * **ML Model Performance:** "Explain the stacking ensemble's performance compared to the individual models."
+            * **Explainability:** "Which features are most predictive of discharge volume based on SHAP values?"
+            """)
+        return
 
     # System instructions construct
     system_instruction = f"""You are the UAC Operational Intelligence Policy Copilot, a Senior AI Architect, Principal Data Scientist, and Government Analytics Expert for the HHS Unaccompanied Alien Children (UAC) Program.
@@ -184,30 +171,11 @@ Guidelines for your responses:
 - Proactively offer insights on bottlenecks, efficiency improvements, or risk factors based on the user's question.
 """
 
-    # Stop page render if key is missing
-    if not api_key:
-        st.info("💡 **Welcome to the AI Policy Copilot!** Please configure your Google Gemini API key in the sidebar to begin querying the operational intelligence agent.")
-        
-        # Display sample dashboard metrics to show the page is alive
-        st.markdown("### 📊 What you can ask the Copilot")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown("""
-            * **Operational Performance:** "How did the average discharge effectiveness change between 2023, 2024, and 2025?"
-            * **Bottleneck Analysis:** "What are the main causes of custody surges and backlog accumulation?"
-            """)
-        with col2:
-            st.markdown("""
-            * **ML Model Performance:** "Explain the stacking ensemble's performance compared to the individual models."
-            * **Explainability:** "Which features are most predictive of discharge volume based on SHAP values?"
-            """)
-        return
-
     # Initialize Gemini Client
     try:
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel(
-            model_name=selected_model_name,
+            model_name=MODEL_NAME,
             system_instruction=system_instruction
         )
     except Exception as e:
@@ -217,12 +185,10 @@ Guidelines for your responses:
     # Chat history state initialization
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
-    if "chat_session" not in st.session_state or st.session_state.get("current_model") != selected_model_name:
-        # Start a new chat session with the model
+    if "chat_session" not in st.session_state:
         st.session_state.chat_session = model.start_chat(history=[])
-        st.session_state.current_model = selected_model_name
 
-    # Suggestion Chips / Buttons
+    # Recommended Queries & Utilities
     st.markdown("### 💡 Recommended Queries")
     suggestions = [
         "What are the key policy recommendations from the reports?",
@@ -231,12 +197,19 @@ Guidelines for your responses:
         "Explain the performance of the predictive stacking ensemble model.",
     ]
 
-    cols = st.columns(4)
+    # Render recommendations in columns with a clear chat button
+    cols = st.columns([2, 2, 2, 2, 1.5])
     suggested_query = None
     for idx, sug in enumerate(suggestions):
         with cols[idx]:
             if st.button(sug, key=f"sug_{idx}", use_container_width=True):
                 suggested_query = sug
+                
+    with cols[-1]:
+        if st.button("🧹 Clear History", key="clear_chat_main", use_container_width=True):
+            st.session_state.chat_history = []
+            st.session_state.chat_session = model.start_chat(history=[])
+            st.rerun()
 
     st.markdown("---")
 
@@ -249,7 +222,7 @@ Guidelines for your responses:
     # Chat input and processing
     user_input = st.chat_input("Ask the UAC Policy Copilot...")
 
-    # If suggested query was clicked, override user_input
+    # Override input if suggestion clicked
     if suggested_query:
         user_input = suggested_query
 
@@ -276,10 +249,3 @@ Guidelines for your responses:
                 except Exception as e:
                     error_msg = f"⚠️ Gemini API Error: {str(e)}\n\nPlease verify your API key and network connection."
                     response_placeholder.error(error_msg)
-                    
-    # Add a clear chat button in the sidebar
-    if st.sidebar.button("🧹 Clear Chat History"):
-        st.session_state.chat_history = []
-        # Restart chat session
-        st.session_state.chat_session = model.start_chat(history=[])
-        st.rerun()
