@@ -91,7 +91,7 @@ def render(df: pd.DataFrame):
     st.sidebar.markdown("### 🔑 Gemini Configuration")
 
     api_key = get_api_key()
-    selected_model_name = "gemini-1.5-flash"
+    selected_model_name = "gemini-pro"
 
     if not api_key:
         st.sidebar.warning("⚠️ No Gemini API Key found.")
@@ -116,7 +116,7 @@ def render(df: pd.DataFrame):
         selected_model_name = st.sidebar.selectbox(
             "Select Model",
             options=model_options,
-            index=0,
+            index=2,
             help="If you get a 404 error (e.g. key has model restrictions), select 'gemini-pro'."
         )
         if st.sidebar.button("Reset API Key"):
